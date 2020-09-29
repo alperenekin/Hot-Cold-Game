@@ -1,13 +1,14 @@
-
-
 import 'dart:math';
-
 import 'package:chance_button/result_enum.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:mobx/mobx.dart';
+part 'hot_cold_viewmodel.g.dart';
 
-abstract class DecideButtonViewModel with Store{
-  @observable
+class HotColdViewModelStore = HotColdViewModel with _$HotColdViewModelStore;
+abstract class HotColdViewModel with Store{
   int randomNumber;
+  final myController = TextEditingController();
+
   @observable
   ResultEnum resultEnum;
 
@@ -21,6 +22,7 @@ abstract class DecideButtonViewModel with Store{
     randomNumber = number;
   }
 
+  @action
   void isHotOrCold(int guess){
     difference = guess - randomNumber;
     if( difference != 0){
@@ -32,5 +34,7 @@ abstract class DecideButtonViewModel with Store{
     }else{
       resultEnum = ResultEnum.HIT;
     }
+    difference2 = difference;
+    myController.text = "";
   }
 }
