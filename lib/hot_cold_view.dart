@@ -25,23 +25,24 @@ class _HotColdViewState extends State<HotColdView> {
       appBar: AppBar(
         title: Text("Hot Or Cold"),
       ),
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Flexible(
-                  flex: 2,
-                  child: hotOrColdColumn(),
-                ),
-                Flexible(
-                  flex: 1,
-                  child: Text("data"),
-                ),
-              ],
-            ),
-      )),
+      body: SingleChildScrollView(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height),
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Flexible(
+                flex: 2,
+                child: hotOrColdColumn(),
+              ),
+              Flexible(
+                flex: 1,
+                child: Text(model.randomNumber.toString()),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
@@ -53,6 +54,7 @@ class _HotColdViewState extends State<HotColdView> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             hotObserver(),
+            greenObserver(),
             coldObserver(),
           ],
         ),
@@ -89,13 +91,27 @@ class _HotColdViewState extends State<HotColdView> {
     });
   }
 
+  Observer greenObserver() {
+    return Observer(builder: (context) {
+      return Container(
+        width: 100,
+        height: 100,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: model.resultEnum == ResultEnum.HIT
+                ? Colors.green
+                : Colors.grey),
+      );
+    });
+  }
+
   Container buildGuessContainer() {
     return Container(
       width: 200,
       color: Colors.white,
       child: TextField(
         decoration: InputDecoration(
-            contentPadding: EdgeInsets.all(8), hintText: "Make your guess"),
+            contentPadding: EdgeInsets.all(8), hintText: "Type your guess"),
         controller: model.myController,
       ),
     );
@@ -107,6 +123,7 @@ class _HotColdViewState extends State<HotColdView> {
         print(model.randomNumber);
         model.isHotOrCold(int.parse(model.myController.text));
       },
+      child: Text("Send your guess"),
     );
   }
 }
