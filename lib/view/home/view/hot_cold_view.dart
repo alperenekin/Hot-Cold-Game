@@ -1,5 +1,7 @@
-import 'package:chance_button/hot_cold_viewmodel.dart';
-import 'package:chance_button/result_enum.dart';
+import 'package:chance_button/core/button/standard_raised_button.dart';
+import 'package:chance_button/core/extension/context_extension.dart';
+import 'package:chance_button/view/home/model/result_enum.dart';
+import 'package:chance_button/view/home/viewmodel/hot_cold_viewmodel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -23,11 +25,15 @@ class _HotColdViewState extends State<HotColdView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Hot Or Cold"),
+        centerTitle: true,
+        title: Text(
+          "Hot Or Cold",
+        ),
       ),
       body: SingleChildScrollView(
         child: ConstrainedBox(
-          constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height),
+          constraints:
+              BoxConstraints(maxHeight: MediaQuery.of(context).size.height),
           child: Column(
             mainAxisSize: MainAxisSize.max,
             children: [
@@ -37,7 +43,7 @@ class _HotColdViewState extends State<HotColdView> {
               ),
               Flexible(
                 flex: 1,
-                child: Text(model.randomNumber.toString()),
+                child: randomShower(),
               ),
             ],
           ),
@@ -60,21 +66,9 @@ class _HotColdViewState extends State<HotColdView> {
         ),
         buildGuessContainer(),
         makeGuessButton(),
+        cheatRaisedButton()
       ],
     );
-  }
-
-  Observer hotObserver() {
-    return Observer(builder: (context) {
-      return Container(
-        width: 100,
-        height: 100,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            color:
-                model.resultEnum == ResultEnum.HOT ? Colors.red : Colors.grey),
-      );
-    });
   }
 
   Observer coldObserver() {
@@ -82,6 +76,7 @@ class _HotColdViewState extends State<HotColdView> {
       return Container(
         width: 100,
         height: 100,
+        child: Icon(Icons.ac_unit),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
             color: model.resultEnum == ResultEnum.COLD
@@ -96,6 +91,7 @@ class _HotColdViewState extends State<HotColdView> {
       return Container(
         width: 100,
         height: 100,
+        child: Icon(Icons.done),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
             color: model.resultEnum == ResultEnum.HIT
@@ -104,6 +100,47 @@ class _HotColdViewState extends State<HotColdView> {
       );
     });
   }
+  Observer randomShower() {
+    return Observer(builder: (context) {
+      return Visibility(
+          visible: model.isVisible, child: Text(model.randomNumber.toString()));
+    });
+  }
+
+  StandardRaisedButton cheatRaisedButton() {
+    return StandardRaisedButton(
+        color: Colors.blue.shade200,
+        onPressed: () {
+          model.changeVisibility();
+        },
+        child: Observer(builder: (context) {
+          return model.isVisible
+              ? Text(
+                  "Hide Answer",
+                  textScaleFactor: context.fixScaleFactor,
+                )
+              : Text(
+                  "Show Me Answer",
+                  textScaleFactor: context.fixScaleFactor,
+                );
+        }));
+  }
+
+  Observer hotObserver() {
+    return Observer(builder: (context) {
+      return Container(
+        width: 100,
+        height: 100,
+        child: Icon(Icons.wb_sunny),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color:
+                model.resultEnum == ResultEnum.HOT ? Colors.red : Colors.grey),
+      );
+    });
+  }
+
+
 
   Container buildGuessContainer() {
     return Container(
@@ -111,19 +148,22 @@ class _HotColdViewState extends State<HotColdView> {
       color: Colors.white,
       child: TextField(
         decoration: InputDecoration(
-            contentPadding: EdgeInsets.all(8), hintText: "Type your guess"),
+            contentPadding: context.paddingLow, hintText: "Type your guess"),
         controller: model.myController,
       ),
     );
   }
 
-  RaisedButton makeGuessButton() {
-    return RaisedButton(
+  StandardRaisedButton makeGuessButton() {
+    return StandardRaisedButton(
+      color: Colors.blue.shade200,
       onPressed: () {
-        print(model.randomNumber);
         model.isHotOrCold(int.parse(model.myController.text));
       },
-      child: Text("Send your guess"),
+      child: Text(
+        "Send your guess",
+        textScaleFactor: context.fixScaleFactor,
+      ),
     );
   }
 }

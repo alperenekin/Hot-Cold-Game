@@ -9,18 +9,18 @@ part of 'hot_cold_viewmodel.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$HotColdViewModelStore on HotColdViewModel, Store {
-  final _$randomNumberAtom = Atom(name: 'HotColdViewModel.randomNumber');
+  final _$isVisibleAtom = Atom(name: 'HotColdViewModel.isVisible');
 
   @override
-  int get randomNumber {
-    _$randomNumberAtom.reportRead();
-    return super.randomNumber;
+  bool get isVisible {
+    _$isVisibleAtom.reportRead();
+    return super.isVisible;
   }
 
   @override
-  set randomNumber(int value) {
-    _$randomNumberAtom.reportWrite(value, super.randomNumber, () {
-      super.randomNumber = value;
+  set isVisible(bool value) {
+    _$isVisibleAtom.reportWrite(value, super.isVisible, () {
+      super.isVisible = value;
     });
   }
 
@@ -54,9 +54,31 @@ mixin _$HotColdViewModelStore on HotColdViewModel, Store {
   }
 
   @override
+  void changeVisibility() {
+    final _$actionInfo = _$HotColdViewModelActionController.startAction(
+        name: 'HotColdViewModel.changeVisibility');
+    try {
+      return super.changeVisibility();
+    } finally {
+      _$HotColdViewModelActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void isHotOrCold(int guess) {
+    final _$actionInfo = _$HotColdViewModelActionController.startAction(
+        name: 'HotColdViewModel.isHotOrCold');
+    try {
+      return super.isHotOrCold(guess);
+    } finally {
+      _$HotColdViewModelActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
-randomNumber: ${randomNumber},
+isVisible: ${isVisible},
 resultEnum: ${resultEnum}
     ''';
   }

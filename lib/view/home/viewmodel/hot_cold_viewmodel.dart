@@ -10,10 +10,13 @@ abstract class HotColdViewModel with Store{
   final myController = TextEditingController();
 
   @observable
+  bool isVisible = false;
+
+  @observable
   ResultEnum resultEnum;
 
-  int difference;
-  int difference2 = 0;
+  int _difference;
+  int _difference2 = 0;
 
   @action
   void initRandom(){
@@ -23,10 +26,15 @@ abstract class HotColdViewModel with Store{
   }
 
   @action
+  void changeVisibility(){
+    isVisible = !isVisible;
+  }
+
+  @action
   void isHotOrCold(int guess){
-    difference = guess - randomNumber;
-    if( difference != 0){
-        if(difference.abs() > difference2.abs()){
+    _difference = guess - randomNumber;
+    if( _difference != 0){
+        if(_difference.abs() > _difference2.abs()){
           resultEnum = ResultEnum.COLD;
         }else{
           resultEnum = ResultEnum.HOT;
@@ -34,7 +42,7 @@ abstract class HotColdViewModel with Store{
     }else{
       resultEnum = ResultEnum.HIT;
     }
-    difference2 = difference;
+    _difference2 = _difference;
     myController.text = "";
   }
 }
