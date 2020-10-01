@@ -1,4 +1,4 @@
-import 'package:chance_button/hot_cold_view.dart';
+import 'package:chance_button/view/home/view/hot_cold_view.dart';
 import 'package:flutter/material.dart';
 
 void main() {
