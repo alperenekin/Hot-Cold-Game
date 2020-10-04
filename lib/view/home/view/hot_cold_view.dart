@@ -2,8 +2,10 @@ import 'package:chance_button/core/base/state/base_state.dart';
 import 'package:chance_button/core/base/widget/base_widget.dart';
 import 'package:chance_button/core/component/button/standard_raised_button.dart';
 import 'package:chance_button/core/extension/context_extension.dart';
+import 'package:chance_button/core/generated/locale_keys.g.dart';
 import 'package:chance_button/view/home/model/result_enum.dart';
 import 'package:chance_button/view/home/viewmodel/hot_cold_viewmodel.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -126,7 +128,7 @@ class _HotColdViewState extends BaseState<HotColdView> {
       color: Colors.white,
       child: TextField(
         decoration: InputDecoration(
-            contentPadding: context.paddingLow, hintText: "Type your guess"),
+            contentPadding: context.paddingLow, hintText: LocaleKeys.view_hint.tr()),
         controller: viewModel.myController,
       ),
     );
