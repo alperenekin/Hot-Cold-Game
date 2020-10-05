@@ -1,6 +1,7 @@
 import 'package:chance_button/core/base/state/base_state.dart';
 import 'package:chance_button/core/base/widget/base_widget.dart';
 import 'package:chance_button/core/component/button/standard_raised_button.dart';
+import 'package:chance_button/core/constant/app_constants.dart';
 import 'package:chance_button/core/extension/context_extension.dart';
 import 'package:chance_button/core/generated/locale_keys.g.dart';
 import 'package:chance_button/view/home/model/result_enum.dart';
@@ -29,6 +30,17 @@ class _HotColdViewState extends BaseState<HotColdView> {
         viewModel = model;
       },
       onPageBuilder: (BuildContext context, HotColdViewModelStore value) => Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text("Hot Or Cold"),
+          actions: [
+            FlatButton(
+                child: Text(context.locale.languageCode),
+                onPressed: (){
+                  context.locale = AppConstants.TR_LOCALE;
+                },
+            )],
+        ),
         body: buildView(),
       ),
     );
@@ -141,7 +153,7 @@ class _HotColdViewState extends BaseState<HotColdView> {
         viewModel.isHotOrCold(int.parse(viewModel.myController.text));
       },
       child: Text(
-        "Send your guess",
+        LocaleKeys.view_send.tr(),
         textScaleFactor: context.fixScaleFactor,
       ),
     );
@@ -156,11 +168,11 @@ class _HotColdViewState extends BaseState<HotColdView> {
         child: Observer(builder: (context) {
           return viewModel.isVisible
               ? Text(
-            "Hide Answer",
+            LocaleKeys.view_hide.tr(),
             textScaleFactor: context.fixScaleFactor,
           )
               : Text(
-            "Show Me Answer",
+            LocaleKeys.view_show.tr(),
             textScaleFactor: context.fixScaleFactor,
           );
         }));

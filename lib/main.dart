@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 void main() {
   runApp(EasyLocalization(
-      supportedLocales: [AppConstants.EN_LOCALE],
+      supportedLocales: [AppConstants.EN_LOCALE,AppConstants.TR_LOCALE],
       path: AppConstants.LANG_PATH,
       child: MyApp())
   );

@@ -1,5 +1,8 @@
 {
   "view": {
-    "hint" : "Type Your Guess"
+    "hint" : "Type Your Guess",
+    "send" : "Send Your Guess",
+    "hide" : "Hide Your Answer",
+    "show" : "Show Me Answer"
   }
 }
