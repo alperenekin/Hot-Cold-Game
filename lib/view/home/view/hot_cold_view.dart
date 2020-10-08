@@ -1,7 +1,6 @@
 import 'package:chance_button/core/base/state/base_state.dart';
 import 'package:chance_button/core/base/widget/base_widget.dart';
 import 'package:chance_button/core/component/button/standard_raised_button.dart';
-import 'package:chance_button/core/constant/app_constants.dart';
 import 'package:chance_button/core/extension/context_extension.dart';
 import 'package:chance_button/core/generated/locale_keys.g.dart';
 import 'package:chance_button/view/home/model/result_enum.dart';
@@ -23,25 +22,49 @@ class _HotColdViewState extends BaseState<HotColdView> {
   Widget build(BuildContext context) {
     return BaseView<HotColdViewModelStore>(
       viewModel: HotColdViewModelStore(),
-      onModelReady: (model) { // model type is HotColdViewModelStore
+      onModelReady: (model) {
+        // model type is HotColdViewModelStore
         model.setContext(context);
         model.init();
-        model.initRandom();
         viewModel = model;
       },
       onPageBuilder: (BuildContext context, HotColdViewModelStore value) => Scaffold(
         appBar: AppBar(
-          centerTitle: true,
           title: Text("Hot Or Cold"),
-          actions: [
-            FlatButton(
-                child: Text(context.locale.languageCode),
-                onPressed: (){
-                  context.locale = AppConstants.TR_LOCALE;
-                },
-            )],
+          actions: [languageButton()],
         ),
         body: buildView(),
+      ),
+    );
+  }
+
+  FlatButton languageButton() {
+    return FlatButton(
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton(
+            value: viewModel.selectedLanguage,
+            items: viewModel.languages.map((language, flag) {
+                  return MapEntry(language,
+                      DropdownMenuItem(
+                        value: language,
+                        child: Row(
+                          children: [
+                            Text(language,style: TextStyle(color: Colors.black),textScaleFactor: context.fixScaleFactor,),
+                            SizedBox(width: context.lowValue,),
+                            Container(
+                                width: dynamicWidth(0.07),
+                                height: dynamicHeight(0.07),
+                                decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                        image: AssetImage(flag))))
+                          ],
+                        ),
+                      ));
+                }).values.toList(),
+            onChanged: (value) {
+              viewModel.selectedLanguage = value;
+              viewModel.setLanguage(viewModel.selectedLanguage);
+            }),
       ),
     );
   }
@@ -50,10 +73,7 @@ class _HotColdViewState extends BaseState<HotColdView> {
     return SingleChildScrollView(
       child: ConstrainedBox(
         constraints:
-        BoxConstraints(maxHeight: MediaQuery
-            .of(context)
-            .size
-            .height),
+            BoxConstraints(maxHeight: MediaQuery.of(context).size.height),
         child: Column(
           mainAxisSize: MainAxisSize.max,
           children: [
@@ -128,8 +148,9 @@ class _HotColdViewState extends BaseState<HotColdView> {
         child: Icon(Icons.wb_sunny),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(context.borderRadius),
-            color:
-            viewModel.resultEnum == ResultEnum.HOT ? Colors.red : Colors.grey),
+            color: viewModel.resultEnum == ResultEnum.HOT
+                ? Colors.red
+                : Colors.grey),
       );
     });
   }
@@ -140,7 +161,8 @@ class _HotColdViewState extends BaseState<HotColdView> {
       color: Colors.white,
       child: TextField(
         decoration: InputDecoration(
-            contentPadding: context.paddingLow, hintText: LocaleKeys.view_hint.tr()),
+            contentPadding: context.paddingLow,
+            hintText: LocaleKeys.view_hint.tr()),
         controller: viewModel.myController,
       ),
     );
@@ -168,13 +190,13 @@ class _HotColdViewState extends BaseState<HotColdView> {
         child: Observer(builder: (context) {
           return viewModel.isVisible
               ? Text(
-            LocaleKeys.view_hide.tr(),
-            textScaleFactor: context.fixScaleFactor,
-          )
+                  LocaleKeys.view_hide.tr(),
+                  textScaleFactor: context.fixScaleFactor,
+                )
               : Text(
-            LocaleKeys.view_show.tr(),
-            textScaleFactor: context.fixScaleFactor,
-          );
+                  LocaleKeys.view_show.tr(),
+                  textScaleFactor: context.fixScaleFactor,
+                );
         }));
   }
 
@@ -182,8 +204,10 @@ class _HotColdViewState extends BaseState<HotColdView> {
     return Observer(builder: (context) {
       return Visibility(
           visible: viewModel.isVisible,
-          child: Text(viewModel.randomNumber.toString(),
-            textScaleFactor: context.fixScaleFactor,));
+          child: Text(
+            viewModel.randomNumber.toString(),
+            textScaleFactor: context.fixScaleFactor,
+          ));
     });
   }
 }
