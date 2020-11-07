@@ -1,6 +1,7 @@
 import 'package:chance_button/core/base/state/base_state.dart';
 import 'package:chance_button/core/base/widget/base_widget.dart';
 import 'package:chance_button/core/component/button/standard_raised_button.dart';
+import 'package:chance_button/core/component/lottie/lottie_widget.dart';
 import 'package:chance_button/core/extension/context_extension.dart';
 import 'package:chance_button/core/generated/locale_keys.g.dart';
 import 'package:chance_button/view/home/model/result_enum.dart';
@@ -28,7 +29,8 @@ class _HotColdViewState extends BaseState<HotColdView> {
         model.init();
         viewModel = model;
       },
-      onPageBuilder: (BuildContext context, HotColdViewModelStore value) => Scaffold(
+      onPageBuilder: (BuildContext context, HotColdViewModelStore value) =>
+          Scaffold(
         appBar: AppBar(
           title: Text("Hot Or Cold"),
           actions: [languageButton()],
@@ -43,14 +45,22 @@ class _HotColdViewState extends BaseState<HotColdView> {
       child: DropdownButtonHideUnderline(
         child: DropdownButton(
             value: viewModel.selectedLanguage,
-            items: viewModel.languages.map((language, flag) {
-                  return MapEntry(language,
+            items: viewModel.languages
+                .map((language, flag) {
+                  return MapEntry(
+                      language,
                       DropdownMenuItem(
                         value: language,
                         child: Row(
                           children: [
-                            Text(language,style: TextStyle(color: Colors.black),textScaleFactor: context.fixScaleFactor,),
-                            SizedBox(width: context.lowValue,),
+                            Text(
+                              language,
+                              style: TextStyle(color: Colors.black),
+                              textScaleFactor: context.fixScaleFactor,
+                            ),
+                            SizedBox(
+                              width: context.lowValue,
+                            ),
                             Container(
                                 width: dynamicWidth(0.07),
                                 height: dynamicHeight(0.07),
@@ -60,7 +70,9 @@ class _HotColdViewState extends BaseState<HotColdView> {
                           ],
                         ),
                       ));
-                }).values.toList(),
+                })
+                .values
+                .toList(),
             onChanged: (value) {
               viewModel.selectedLanguage = value;
               viewModel.setLanguage(viewModel.selectedLanguage);
@@ -115,7 +127,9 @@ class _HotColdViewState extends BaseState<HotColdView> {
       return Container(
         width: dynamicWidth(0.2),
         height: dynamicHeight(0.15),
-        child: Icon(Icons.done),
+        child: viewModel.resultEnum == ResultEnum.HIT
+            ? LottieWidget(path: "congrats")
+            : Icon(Icons.done),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(context.borderRadius),
             color: viewModel.resultEnum == ResultEnum.HIT
